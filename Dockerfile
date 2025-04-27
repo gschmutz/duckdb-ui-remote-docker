@@ -6,7 +6,20 @@ RUN apt-get update && apt-get install -y curl screen openssl
 
 USER haproxy
 # Install the duckdb CLI
-RUN curl https://install.duckdb.org | sh
+RUN ARCH="$(uname -m)" && \
+    if [ "$ARCH" = "aarch64" ]; then \
+        DUCKDB_URL="https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-aarch64.zip"; \
+    elif [ "$ARCH" = "x86_64" ]; then \
+        DUCKDB_URL="https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-amd64.zip"; \
+    else \
+        echo "Unsupported architecture: $ARCH" && exit 1; \
+    fi && \
+    curl -L -o duckdb.zip "$DUCKDB_URL" && \
+    apt-get install -y unzip && \
+    unzip duckdb.zip && \
+    mv duckdb /usr/local/bin/duckdb && \
+    chmod +x /usr/local/bin/duckdb && \
+    rm duckdb.zip
 
 # Generate self-signed certificate
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
