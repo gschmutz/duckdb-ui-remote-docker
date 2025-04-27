@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run DuckDB UI in screen
-screen -L -Logfile ./duckdb_ui.log -dmS duckdb_ui /var/lib/haproxy/.duckdb/cli/latest/duckdb -ui
+screen -L -Logfile ./duckdb_ui.log -dmS duckdb_ui /usr/local/bin/duckdb -ui
 
 # Run HAProxy
 screen -L -Logfile ./haproxy.log -dmS haproxy_app haproxy -f /usr/local/etc/haproxy/haproxy.cfg
