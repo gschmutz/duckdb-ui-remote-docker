@@ -64,5 +64,5 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}            
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            VERSION=v1.2.2                   
+            VERSION=${{ env.VERSION }}                
 
