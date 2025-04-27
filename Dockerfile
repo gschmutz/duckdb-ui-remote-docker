@@ -1,21 +1,21 @@
 FROM haproxy:bookworm
 
 USER root
-# Install curl, OpenSSL, and screen
-RUN apt-get update && apt-get install -y curl screen openssl
 
-USER haproxy
-# Install the duckdb CLI
-RUN ARCH="$(uname -m)" && \
-    if [ "$ARCH" = "aarch64" ]; then \
+ARG TARGETARCH
+
+# Install curl, OpenSSL, screen, unzip
+RUN apt-get update && apt-get install -y curl screen openssl unzip
+
+# Install DuckDB CLI based on architecture
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
         DUCKDB_URL="https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-aarch64.zip"; \
-    elif [ "$ARCH" = "x86_64" ]; then \
+    elif [ "$TARGETARCH" = "amd64" ]; then \
         DUCKDB_URL="https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-amd64.zip"; \
     else \
-        echo "Unsupported architecture: $ARCH" && exit 1; \
+        echo "Unsupported architecture: $TARGETARCH" && exit 1; \
     fi && \
     curl -L -o duckdb.zip "$DUCKDB_URL" && \
-    apt-get install -y unzip && \
     unzip duckdb.zip && \
     mv duckdb /usr/local/bin/duckdb && \
     chmod +x /usr/local/bin/duckdb && \
