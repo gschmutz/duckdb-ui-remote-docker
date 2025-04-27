@@ -3,15 +3,16 @@ FROM haproxy:bookworm
 USER root
 
 ARG TARGETARCH
+ARG VERSION
 
 # Install curl, OpenSSL, screen, unzip
 RUN apt-get update && apt-get install -y curl screen openssl unzip
 
 # Install DuckDB CLI based on architecture
 RUN if [ "$TARGETARCH" = "arm64" ]; then \
-        DUCKDB_URL="https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-aarch64.zip"; \
+        DUCKDB_URL="https://github.com/duckdb/duckdb/releases/$VERSION/download/duckdb_cli-linux-aarch64.zip"; \
     elif [ "$TARGETARCH" = "amd64" ]; then \
-        DUCKDB_URL="https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-amd64.zip"; \
+        DUCKDB_URL="https://github.com/duckdb/duckdb/releases/$VERSION/download/duckdb_cli-linux-amd64.zip"; \
     else \
         echo "Unsupported architecture: $TARGETARCH" && exit 1; \
     fi && \
