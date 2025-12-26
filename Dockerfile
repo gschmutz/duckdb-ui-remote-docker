@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y curl screen openssl unzip
 
 # Install DuckDB CLI based on architecture
 RUN if [ "$TARGETARCH" = "arm64" ]; then \
-        DUCKDB_URL="https://github.com/duckdb/duckdb/releases/download/$APP_VERSION/duckdb_cli-linux-aarch64.zip"; \
+        DUCKDB_URL="https://github.com/duckdb/duckdb/releases/download/$APP_VERSION/duckdb_cli-linux-arm64.zip"; \
     elif [ "$TARGETARCH" = "amd64" ]; then \
         DUCKDB_URL="https://github.com/duckdb/duckdb/releases/download/$APP_VERSION/duckdb_cli-linux-amd64.zip"; \
     else \
